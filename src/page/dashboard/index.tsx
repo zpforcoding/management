@@ -125,7 +125,7 @@ function Dashboard() {
             }
             setData(updataOption)
         }
-        loadData()
+        // loadData()
     }, [])
 
     return <div className="dashboard">

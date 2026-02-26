@@ -29,21 +29,19 @@ function Login() {
             const loginSuccess = await login('', values.username, values.password);
             
             if (loginSuccess) {
-                // 从localStorage获取token（Angular风格）
+
+                localStorage.removeItem('TenantName');
+                localStorage.removeItem('TenantId');
+
                 const authToken = localStorage.getItem('auth_token');
                 
-                // 这里可以根据实际需求设置Redux状态或其他操作
                 if (authToken) {
                     dispatch(setToken(authToken));
-                    sessionStorage.setItem("username", values.username);
                     
                     // 提供明确的成功反馈
                     message.success('登录成功！正在跳转到首页...', 2);
                     
-                    // 延迟跳转，让用户看到成功提示
-                    setTimeout(() => {
-                        navigate("/equipment", { replace: true });
-                    }, 1500);
+                    navigate("/dashboard", { replace: true }); 
                 }
             } else {
                 message.error('登录失败，请检查用户名和密码');

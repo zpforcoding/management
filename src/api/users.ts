@@ -44,7 +44,9 @@ export async function login(tenantId: string, username: string, password: string
         
         // 处理响应
         if (response && response.data && response.data.access_token) {
+
             localStorage.setItem('auth_token', response.data.access_token);
+            localStorage.setItem('access_token', response.data.access_token);
             localStorage.setItem('refresh_token', response.data.refresh_token);
             
             console.log('Login successful');

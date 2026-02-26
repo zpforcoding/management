@@ -30,6 +30,10 @@ const TenantConfig = React.lazy(() => import("../page/system/tenantConfig"));
 const Role = React.lazy(() => import("../page/system/role"));
 const User = React.lazy(() => import("../page/system/user"));
 const MiniProgram = React.lazy(() => import("../page/system/miniprogram"));
+// 模拟登录相关页面
+const Impersonation = React.lazy(() => import("../page/impersonation/index"));
+const ImpersonationRole = React.lazy(() => import("../page/impersonation/role"));
+const ImpersonationUser = React.lazy(() => import("../page/impersonation/user"));
 
 export const routes:RouteObject[]=[
     // 根路径 - 主页面
@@ -154,6 +158,26 @@ export const routes:RouteObject[]=[
     {
         path:"/app-authority",
         element: <RequireAuth allowed={true} redirectTo="/login"> <MiniProgram/> </RequireAuth>
+    },
+    
+    // 模拟登录路由
+    {
+        path: "/impersonation",
+        element: <Impersonation />,
+        children: [
+            {
+                path: "role",
+                element: <ImpersonationRole />
+            },
+            {
+                path: "user",
+                element: <ImpersonationUser />
+            },
+            {
+                index: true,
+                element: <ImpersonationRole />
+            }
+        ]
     },
     
     // 404页面

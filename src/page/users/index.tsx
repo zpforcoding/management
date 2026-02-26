@@ -3,12 +3,14 @@ import { Card, Row, Col, Input, Button, Table, Pagination,Tag,Popconfirm,message
 import "./index.scss"
 import type { TableProps } from 'antd';
 import { useState, useEffect, useMemo,useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import type { DataType } from "./interface";
-import { getUserList, getTenantWithCount, getTenantList, copyConfig, getFmsSetting, saveFmsSetting, getUsersByTenantId, deleteUser } from "../../api/userList";
+import { getUserList, getTenantWithCount, getTenantList, copyConfig, getFmsSetting, saveFmsSetting, getUsersByTenantId, deleteUser, impersonationLogin } from "../../api/userList";
 import type { PaginationProps } from 'antd';
 import UserForm from "./userForm";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../store/user/userSlice";
+import { setToken } from "../../store/login/authSlice";
 interface searchType {
     name: string;
     companyName: string;
@@ -16,6 +18,7 @@ interface searchType {
 }
 
 function Users() {
+    const navigate = useNavigate();
     const [dataList, setDataList] = useState<DataType[]>([])
     const [page, setPage] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
@@ -359,12 +362,40 @@ function Users() {
         }
     };
     // 模拟登录操作
-    const handleSimulateLogin = (user: any) => {
-        message.success(`模拟登录用户: ${user.userName}`);
-        // 这里可以添加实际的模拟登录逻辑
-        console.log('模拟登录用户:', user);
-    };
-    const onSelectChange = (selectedRowKeys: React.Key[]) => {
+    const handleSimulateLogin = async (user: any) => {
+        const selectedTenant = getSelectedTenant();
+        if (!selectedTenant) return;
+        
+        try {
+            setLoginLoading(true);
+            const response = await impersonationLogin(selectedTenant.id, user.id);
+            if (response.data && response.data.access_token) {
+                // 保存认证信息
+                const authToken = response.data.access_token;
+                localStorage.setItem('auth_token', authToken);
+                localStorage.setItem('access_token', authToken);
+                localStorage.setItem('refresh_token', response.data.refresh_token);
+                localStorage.setItem('TenantName', selectedTenant.companyName);
+                
+                // 更新Redux中的token状态
+                dispatch(setToken(authToken));
+                
+                message.success(`模拟登录用户: ${user.userName} 成功`);
+                
+                // 跳转到新的路由页面（不包含导航）
+                navigate('/impersonation', { replace: true });
+                
+            } else {
+                message.error('模拟登录失败');
+                console.error('模拟登录失败:', response);
+            }
+        } catch (error) {
+            message.error('模拟登录失败');
+            console.error('模拟登录错误:', error);
+        } finally {
+            setLoginLoading(false);
+        }
+    };    const onSelectChange = (selectedRowKeys: React.Key[]) => {
         // 限制只能选择一行
         if (selectedRowKeys.length > 1) {
             setSelectedRowKeys([selectedRowKeys[selectedRowKeys.length - 1]]);
