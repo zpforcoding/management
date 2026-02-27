@@ -21,6 +21,7 @@ import {
     getRoles, 
     getUsers, 
     createUserWithKjl, 
+    updateUserWithKjl,
     deleteUser,
     type RoleDTO, 
     type CreateUserParams 
@@ -147,8 +148,11 @@ export default function ImpersonationUser() {
             isActive: record.isActive,
             flag: record.flag
         });
-        // 设置角色选中状态（这里需要根据实际数据调整）
-        setCheckedRoles([record.roleName]);
+        // 设置角色选中状态
+        const userRoleNames = Array.isArray(record.roleName) 
+            ? record.roleName 
+            : [record.roleName];
+        setCheckedRoles(userRoleNames);
         setModalVisible(true);
     };
 
@@ -156,6 +160,11 @@ export default function ImpersonationUser() {
     const handleSaveUser = async () => {
         try {
             const values = await form.validateFields();
+            
+            // 处理角色信息：使用用户勾选的角色（表单已验证必填）
+            const roleNames = (checkedRoles as string[]).filter(role => 
+                role !== null && role !== undefined && role !== ''
+            );
             
             const params: CreateUserParams = {
                 userName: values.userName,
@@ -165,15 +174,15 @@ export default function ImpersonationUser() {
                 phoneNumber: values.phoneNumber,
                 kujialeUid: values.kujialeUid,
                 partnerID: values.partnerID,
-                roleNames: checkedRoles as string[],
+                roleNames: roleNames,
                 isActive: values.isActive,
                 flag: values.flag
             };
             
             if (editingUser) {
-                // 编辑用户 - 这里需要实现PUT请求
+                // 编辑用户
+                await updateUserWithKjl(editingUser.id, params);
                 message.success('用户更新成功');
-                console.log('编辑用户参数:', { ...params, id: editingUser.id });
             } else {
                 // 新增用户
                 await createUserWithKjl(params);

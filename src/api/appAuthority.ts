@@ -18,6 +18,8 @@ export interface CreateAuthorityParams {
 
 // 更新权限参数
 export interface UpdateAuthorityParams {
+  id: number;
+  parentId?: number;
   name: string;
   remark: string;
 }
@@ -53,7 +55,7 @@ export async function createAppAuthority(params: CreateAuthorityParams): Promise
  */
 export async function updateAppAuthority(id: number, params: UpdateAuthorityParams): Promise<AppAuthorityDTO> {
   try {
-    const response = await put(`/api/app/app-authority/app-auth/${id}`, params);
+    const response = await put(`/api/app/app-authority/app-auth/`, params);
     return response.data;
   } catch (error: any) {
     const errorMessage = error.response?.data?.message || error.message || '更新权限失败';

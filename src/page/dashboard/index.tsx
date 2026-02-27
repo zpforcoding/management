@@ -1,12 +1,12 @@
 import { Row, Col, Card, Progress, Statistic, Timeline,Tag } from "antd"
-import { RadarChartOutlined, SnippetsOutlined, DollarOutlined, LaptopOutlined } from "@ant-design/icons"
+import { BarChartOutlined, SnippetsOutlined, DollarOutlined, LaptopOutlined } from "@ant-design/icons"
 import ReactECharts from "echarts-for-react"
-import { getEnergyData } from "../../api/dashboard"
+import { getOrderSplitData } from "../../api/dashboard"
 import { useEffect, useState } from "react"
 import "./index.scss"
 const option2 = {
     title: {
-        text: '企业资质情况(家)'
+        text: '拆单数量统计(单)'
     },
     tooltip: {
         trigger: 'axis',
@@ -24,7 +24,7 @@ const option2 = {
     xAxis: {
         type: 'category',
         boundaryGap: [0, 0.01],
-        data: ['2014', '2016', '2018', '2020', '2022', "2024"]
+        data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
     },
     yAxis: {
         type: 'value',
@@ -32,44 +32,74 @@ const option2 = {
     },
     series: [
         {
-            name: '科技企业',
+            name: '拆单数量',
             type: 'bar',
-            data: [40, 220, 378, 658, 1122, 1200]
-        },
-        {
-            name: '高新企业',
-            type: 'bar',
-            data: [20, 39, 443, 490, 559, 762]
-        },
-        {
-            name: '国营企业',
-            type: 'bar',
-            data: [78, 167, 229, 330, 380, 420]
+            data: [270, 302, 241, 332, 223, 520, 465, 340, 421, 461, 398, 443]
         }
     ]
 };
 const option3 = {
+    title: {
+        text: '各租户拆单占比',
+        left: 'center'
+    },
+    tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} : {c} ({d}%)'
+    },
     legend: {
-        top: '10px'
+        type: 'scroll',
+        orient: 'vertical',
+        right: 10,
+        top: 20,
+        bottom: 20,
+        textStyle: {
+            fontSize: 12
+        }
     },
     series: [
         {
-            name: 'Nightingale Chart',
+            name: '拆单占比',
             type: 'pie',
-            radius: [30, 100],
-            center: ['50%', '50%'],
-            roseType: 'area',
+            radius: ['40%', '70%'],
+            center: ['40%', '50%'],
+            avoidLabelOverlap: false,
             itemStyle: {
-                borderRadius: 8
+                borderRadius: 10,
+                borderColor: '#fff',
+                borderWidth: 2
+            },
+            label: {
+                show: true,
+                formatter: '{b|{b}：}{c}单\n{per|{d}%}',
+                rich: {
+                    b: {
+                        fontSize: 14,
+                        lineHeight: 20
+                    },
+                    per: {
+                        color: '#333',
+                        fontSize: 12,
+                        lineHeight: 20
+                    }
+                }
+            },
+            emphasis: {
+                label: {
+                    show: true,
+                    fontSize: 14,
+                    fontWeight: 'bold'
+                }
             },
             data: [
-                { value: 40, name: '在营' },
-                { value: 38, name: '已租' },
-                { value: 32, name: '出租' },
-                { value: 30, name: '续签' },
-                { value: 28, name: '新签' },
-                { value: 26, name: '待租' },
-                { value: 22, name: '退租' },
+                { value: 120, name: '豪马格演示租户(对接精品库)' },
+                { value: 95, name: '意凡诺（全线版)' },
+                { value: 88, name: '江门尚博定制（全线版)' },
+                { value: 76, name: '清远华丽轩智能家居（全线版)' },
+                { value: 65, name: '酷家乐测试租户(海外版)' },
+                { value: 58, name: '酷家乐演示配置(对接精品库)' },
+                { value: 52, name: '适内家居（全线版)' },
+                { value: 45, name: 'AI智库(生态)' }
             ]
         }
     ]
@@ -77,7 +107,7 @@ const option3 = {
 function Dashboard() {
     const initalOption = {
         title: {
-            text: '当日能源消耗'
+            text: '当日拆单统计'
         },
         tooltip: {
             trigger: 'axis'
@@ -109,7 +139,7 @@ function Dashboard() {
     const [data, setData] = useState(initalOption)
     useEffect(() => {
         const loadData = async () => {
-            const { data: apiData } = await getEnergyData();
+            const { data: apiData } = await getOrderSplitData();
             const dataList = apiData.map((item: any) => ({
                 name: item.name,
                 data: item.data,
@@ -137,7 +167,7 @@ function Dashboard() {
                         <p>园区总面积(平方米)</p>
                     </div>
                     <div className="fr">
-                        <RadarChartOutlined className="icon" />
+                        <BarChartOutlined className="icon" />
                     </div>
                 </Card>
             </Col>
@@ -177,19 +207,19 @@ function Dashboard() {
         </Row>
         <Row gutter={16} className="mt">
             <Col span={12}>
-                <Card title="能源消耗情况">
+                <Card title="拆单统计情况">
                     <ReactECharts option={data}></ReactECharts>
                 </Card>
             </Col>
             <Col span={12}>
-                <Card title="企业资质情况">
+                <Card title="拆单月度对比">
                     <ReactECharts option={option2}></ReactECharts>
                 </Card>
             </Col>
         </Row>
         <Row gutter={16} className="mt">
             <Col span={12}>
-                <Card title="租赁情况">
+                <Card title="租户拆单占比">
                     <ReactECharts option={option3}></ReactECharts>
                 </Card>
             </Col>

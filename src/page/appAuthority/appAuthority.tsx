@@ -169,8 +169,10 @@ const AppAuthority: React.FC = () => {
       if (editingAuthority) {
         // 编辑权限
         const params: UpdateAuthorityParams = {
+          id: editingAuthority.id,
           name: values.name,
-          remark: values.remark
+          remark: values.remark,
+          parentId: values.parentId
         };
         
         await updateAppAuthority(editingAuthority.id, params);
@@ -400,7 +402,10 @@ const AppAuthority: React.FC = () => {
               { max: 50, message: '权限Key不能超过50个字符' }
             ]}
           >
-            <Input placeholder="请输入权限Key" />
+            <Input 
+              placeholder="请输入权限Key" 
+              disabled={!!editingAuthority} // 编辑模式下禁用修改
+            />
           </Form.Item>
 
           <Form.Item

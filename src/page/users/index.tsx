@@ -28,7 +28,7 @@ function Users() {
     const [loading, setLoading] = useState<boolean>(false)
     const [isModalOpen,setIsModalOpen]=useState<boolean>(false)
     const [title,setTitle]=useState<string>("")
-    const [showSplitOrder, setShowSplitOrder] = useState<boolean>(false)
+
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
     const [copyModalVisible, setCopyModalVisible] = useState<boolean>(false)
     const [sourceTenants, setSourceTenants] = useState<DataType[]>([])
@@ -106,7 +106,6 @@ function Users() {
         setFormData({ name: "", companyName: "", area: ""})
         setPage(1)
         setPageSize(10);
-        setShowSplitOrder(false);
         loadData()
     }
     const confirm=async function(id:string){
@@ -133,7 +132,6 @@ function Users() {
 
     const showSplitOrderData = async () => {
         setLoading(true);
-        setShowSplitOrder(true);
         try {
             const maxResultCount = pageSize;
             const response = await getTenantWithCount({ maxResultCount });
@@ -538,11 +536,11 @@ function Users() {
                         ➕ 新增租户
                     </Button>
                     <Button 
-                        type={showSplitOrder ? "default" : "primary"} 
+                        type="primary" 
                         className="ml"
                         onClick={showSplitOrderData}
                     >
-                        {showSplitOrder ? '📊 显示全部租户' : '📈 显示拆单情况'}
+                        📈 显示拆单情况
                     </Button>
                 </div>
                 {selectedRowKeys.length > 0 && (

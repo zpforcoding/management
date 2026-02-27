@@ -52,10 +52,6 @@ const AddAndEdit: React.FC<CreateOrUpdateModalProps> = ({
     try {
       const values = await form.validateFields();
       setConfirmLoading(true);
-      
-      // 模拟API调用延迟
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
       onOk(values);
       message.success(authority ? '修改成功' : '添加成功');
       form.resetFields();
@@ -110,7 +106,10 @@ const AddAndEdit: React.FC<CreateOrUpdateModalProps> = ({
             { max: 50, message: '权限名称不能超过50个字符' }
           ]}
         >
-          <Input placeholder="请输入权限名称" />
+          <Input 
+            placeholder="请输入权限名称" 
+            disabled={!!authority} // 编辑模式下禁用修改
+          />
         </Form.Item>
 
         <Form.Item

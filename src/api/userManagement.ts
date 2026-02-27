@@ -1,4 +1,4 @@
-import { get, post, del } from "../utils/http/request";
+import { get, post, put, del } from "../utils/http/request";
 
 // 角色数据接口
 export interface RoleDTO {
@@ -92,7 +92,50 @@ export async function createUserWithKjl(params: CreateUserParams): Promise<UserD
     const response = await post('/api/app/users/user-with-kjl', params);
     return response.data;
   } catch (error: any) {
-    const errorMessage = error.response?.data?.message || error.message || '创建用户失败';
+    // 处理API返回的错误信息结构
+    const apiError = error.response?.data;
+    let errorMessage = '创建用户失败';
+    
+    if (apiError) {
+      // 优先使用API返回的具体错误信息
+      if (apiError.message) {
+        errorMessage = apiError.message;
+      } else if (apiError.validationErrors && Array.isArray(apiError.validationErrors)) {
+        // 处理验证错误
+        errorMessage = apiError.validationErrors.map((err: any) => err.message || '验证失败').join('; ');
+      }
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+    
+    throw new Error(errorMessage);
+  }
+}
+
+/**
+ * 更新用户信息
+ */
+export async function updateUserWithKjl(userId: string, params: Partial<CreateUserParams>): Promise<UserDTO> {
+  try {
+    const response = await put(`/api/app/users/${userId}/user-with-kjl`, params);
+    return response.data;
+  } catch (error: any) {
+    // 处理API返回的错误信息结构
+    const apiError = error.response?.data;
+    let errorMessage = '更新用户失败';
+    
+    if (apiError) {
+      // 优先使用API返回的具体错误信息
+      if (apiError.message) {
+        errorMessage = apiError.message;
+      } else if (apiError.validationErrors && Array.isArray(apiError.validationErrors)) {
+        // 处理验证错误
+        errorMessage = apiError.validationErrors.map((err: any) => err.message || '验证失败').join('; ');
+      }
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+    
     throw new Error(errorMessage);
   }
 }
