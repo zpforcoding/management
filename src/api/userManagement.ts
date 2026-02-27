@@ -1,6 +1,6 @@
 import { get, post, del } from "../utils/http/request";
 
-// 角色数据接口（复用role.ts中的定义）
+// 角色数据接口
 export interface RoleDTO {
   id: string;
   name: string;
@@ -46,8 +46,10 @@ export interface CreateUserParams {
   flag: number;
 }
 
-// 获取角色列表（用于用户表单中的角色选择）
-export async function getRolesForUser(skipCount: number = 0, maxResultCount: number = 999): Promise<RoleListResponse> {
+/**
+ * 获取角色列表（用于用户表单中的角色选择）
+ */
+export async function getRoles(skipCount: number = 0, maxResultCount: number = 999): Promise<RoleListResponse> {
   try {
     const response = await get('/api/app/role', { skipCount, maxResultCount });
     return response.data;
@@ -57,7 +59,9 @@ export async function getRolesForUser(skipCount: number = 0, maxResultCount: num
   }
 }
 
-// 获取用户列表（分页）
+/**
+ * 获取用户列表（分页）
+ */
 export async function getUsers(skipCount: number = 0, maxResultCount: number = 15): Promise<{ totalCount: number; items: UserDTO[] }> {
   try {
     const response = await get('/api/app/users', { skipCount, maxResultCount });
@@ -68,7 +72,9 @@ export async function getUsers(skipCount: number = 0, maxResultCount: number = 1
   }
 }
 
-// 删除用户
+/**
+ * 删除用户
+ */
 export async function deleteUser(userId: string): Promise<void> {
   try {
     await del(`/api/app/users/${userId}`);
@@ -78,7 +84,9 @@ export async function deleteUser(userId: string): Promise<void> {
   }
 }
 
-// 创建用户（包含酷家乐信息）
+/**
+ * 创建用户（包含酷家乐信息）
+ */
 export async function createUserWithKjl(params: CreateUserParams): Promise<UserDTO> {
   try {
     const response = await post('/api/app/users/user-with-kjl', params);

@@ -18,13 +18,13 @@ import {
 import type { TableProps } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { 
-    getRolesForUser, 
+    getRoles, 
     getUsers, 
     createUserWithKjl, 
     deleteUser,
     type RoleDTO, 
     type CreateUserParams 
-} from "../../api/user";
+} from "../../api/userManagement";
 
 type CheckboxValueType = string | number | boolean;
 
@@ -95,7 +95,7 @@ export default function ImpersonationUser() {
 
     const loadRoles = async () => {
         try {
-            const response = await getRolesForUser(0, 999);
+            const response = await getRoles(0, 999);
             return response;
         } catch (error: any) {
             throw new Error(error.message || '获取角色数据失败');

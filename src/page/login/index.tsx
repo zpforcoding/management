@@ -4,7 +4,7 @@ import lgbg from "../../assets/lgbg.jpg"
 import "./index.scss"
 import { Button, Form, Input, message } from 'antd';
 import { UserOutlined,LockOutlined  } from '@ant-design/icons';
-import { login } from "../../api/users";
+import { login } from "../../api/auth";
 import AuthService from "../../services/authService";
 import { setToken, clearToken } from "../../store/login/authSlice";
 import { useDispatch } from "react-redux";

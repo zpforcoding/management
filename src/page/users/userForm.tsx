@@ -2,7 +2,7 @@ import { Modal, Row, Col, Form, Input, Select, DatePicker, message } from "antd"
 import dayjs from "dayjs"
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { createTenant, updateTenant } from "../../api/userList";
+import { createTenant, updateTenant } from "../../api/tenant";
 interface FormProps {
     visible: boolean;
     hideModal: () => void;

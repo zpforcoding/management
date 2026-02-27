@@ -5,7 +5,9 @@ import type { TableProps } from 'antd';
 import { useState, useEffect, useMemo,useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import type { DataType } from "./interface";
-import { getUserList, getTenantWithCount, getTenantList, copyConfig, getFmsSetting, saveFmsSetting, getUsersByTenantId, deleteUser, impersonationLogin } from "../../api/userList";
+import { getTenantList as getUserList, getTenantWithCount, getAllTenants as getTenantList, copyTenantConfig as copyConfig, getFmsSetting, saveFmsSetting } from "../../api/tenant";
+import { getUsersByTenantId, impersonationLogin } from "../../api/impersonation";
+import { deleteUser } from "../../api/userManagement";
 import type { PaginationProps } from 'antd';
 import UserForm from "./userForm";
 import { useDispatch } from "react-redux";
@@ -109,7 +111,7 @@ function Users() {
     }
     const confirm=async function(id:string){
       try {
-        const {data}= await deleteUser(id);
+        await deleteUser(id);
         message.success('租户删除成功');
         loadData();
       } catch (error) {

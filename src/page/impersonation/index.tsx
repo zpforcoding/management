@@ -1,9 +1,10 @@
 import React from "react";
-import { Layout, Menu, Button } from "antd";
-import { UserOutlined, TeamOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Layout, Menu, Button, message } from "antd";
+import { UserOutlined, TeamOutlined, LogoutOutlined, RollbackOutlined } from '@ant-design/icons';
 import { useNavigate, Outlet } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { clearToken } from "../../store/login/authSlice";
+import { clearToken, setToken } from "../../store/login/authSlice";
+import { backToImpersonator } from "../../api/auth";
 
 const { Header, Content, Sider } = Layout;
 
@@ -25,6 +26,36 @@ export default function Impersonation() {
             onClick: () => navigate('/impersonation/user')
         }
     ];
+    // 返回我的账号
+    const handleBackToMainAccount = async () => {
+        try {
+            const tokenData = await backToImpersonator();
+            
+            if (tokenData) {
+                // 更新本地存储
+                localStorage.setItem('auth_token', tokenData.accessToken);
+                localStorage.setItem('access_token', tokenData.accessToken);
+                localStorage.setItem('refresh_token', tokenData.refreshToken);
+                
+                // 更新Redux中的token状态
+                dispatch(setToken(tokenData.accessToken));
+                
+                // 只有无租户的管理员才能模拟账号登录，返回后必然TenantName为空
+                localStorage.removeItem('TenantName');
+                localStorage.removeItem('TenantId');
+                
+                message.success('返回主账号成功');
+                
+                // 跳转到租户列表路由
+                navigate("/users/list", { replace: true });
+            } else {
+                message.error('返回主账号失败');
+            }
+        } catch (error: any) {
+            console.error("返回主账号失败:", error);
+            message.error(error.message || '返回主账号失败');
+        }
+    };
 
     const handleLogout = () => {
         // 清除浏览器所有token和存储信息
@@ -55,6 +86,14 @@ export default function Impersonation() {
                     <span style={{ marginRight: '16px', color: '#666' }}>
                         当前租户: {localStorage.getItem('TenantName') || '未知'}
                     </span>
+                    <Button 
+                        type="default" 
+                        icon={<RollbackOutlined />}
+                        onClick={handleBackToMainAccount}
+                        style={{ marginRight: '12px' }}
+                    >
+                        返回我的账号
+                    </Button>
                     <Button 
                         type="primary" 
                         danger 

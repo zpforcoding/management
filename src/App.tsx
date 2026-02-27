@@ -4,7 +4,7 @@ import { useEffect, useState, Suspense } from "react";
 import { generateRoutes } from "./utils/generatesRoutes";
 import { Spin } from "antd";
 import { createBrowserRouter } from "react-router-dom";
-import { getMenu } from "./api/users";
+import { getMenu } from "./api/auth";
 import { useDispatch } from 'react-redux';
 import { setMenu } from "./store/login/authSlice";
 import { useSelector } from "react-redux";
