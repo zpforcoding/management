@@ -1,12 +1,12 @@
 import { Row, Col, Card, Progress, Statistic, Timeline,Tag } from "antd"
-import { BarChartOutlined, SnippetsOutlined, DollarOutlined, LaptopOutlined } from "@ant-design/icons"
+import { UserOutlined, ShoppingCartOutlined, BuildOutlined, AreaChartOutlined } from "@ant-design/icons"
 import ReactECharts from "echarts-for-react"
 import { getOrderSplitData } from "../../api/dashboard"
 import { useEffect, useState } from "react"
 import "./index.scss"
 const option2 = {
     title: {
-        text: '拆单数量统计(单)'
+        text: '订单数量统计(单)'
     },
     tooltip: {
         trigger: 'axis',
@@ -32,7 +32,7 @@ const option2 = {
     },
     series: [
         {
-            name: '拆单数量',
+            name: '订单数量',
             type: 'bar',
             data: [270, 302, 241, 332, 223, 520, 465, 340, 421, 461, 398, 443]
         }
@@ -40,7 +40,7 @@ const option2 = {
 };
 const option3 = {
     title: {
-        text: '各租户拆单占比',
+        text: '用户订单占比',
         left: 'center'
     },
     tooltip: {
@@ -59,7 +59,7 @@ const option3 = {
     },
     series: [
         {
-            name: '拆单占比',
+            name: '订单占比',
             type: 'pie',
             radius: ['40%', '70%'],
             center: ['40%', '50%'],
@@ -107,16 +107,16 @@ const option3 = {
 function Dashboard() {
     const initalOption = {
         title: {
-            text: '当日拆单统计'
+            text: '当日订单统计'
         },
         tooltip: {
             trigger: 'axis'
         },
         legend: {
-            data: []
+            data: ['订单数量']
         },
         grid: {
-            left: '%',
+            left: '3%',
             right: '4%',
             bottom: '3%',
             containLabel: true
@@ -134,7 +134,32 @@ function Dashboard() {
         yAxis: {
             type: 'value'
         },
-        series: []
+        series: [
+            {
+                name: '订单数量',
+                type: 'line',
+                stack: 'Total',
+                data: [12, 18, 35, 42, 38, 28, 15],
+                smooth: true,
+                itemStyle: {
+                    color: '#1890ff'
+                },
+                areaStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        colorStops: [{
+                            offset: 0, color: 'rgba(24, 144, 255, 0.3)'
+                        }, {
+                            offset: 1, color: 'rgba(24, 144, 255, 0.05)'
+                        }]
+                    }
+                }
+            }
+        ]
     };
     const [data, setData] = useState(initalOption)
     useEffect(() => {
@@ -163,77 +188,76 @@ function Dashboard() {
             <Col span={6}>
                 <Card className="clearfix">
                     <div className="fl area">
-                        <h2>13479</h2>
-                        <p>园区总面积(平方米)</p>
+                        <h2>37</h2>
+                        <p>用户总数</p>
                     </div>
                     <div className="fr">
-                        <BarChartOutlined className="icon" />
+                        <UserOutlined className="icon" />
                     </div>
                 </Card>
             </Col>
             <Col span={6}>
                 <Card className="clearfix">
                     <div className="fl area">
-                        <h2>8635</h2>
-                        <p>总租赁面积(平方米)</p>
+                        <h2>9443</h2>
+                        <p>订单数</p>
                     </div>
                     <div className="fr">
-                        <SnippetsOutlined className="icon" style={{ color: "#81c452" }} />
+                        <ShoppingCartOutlined className="icon" style={{ color: "#81c452" }} />
                     </div>
                 </Card>
             </Col>
             <Col span={6}>
                 <Card className="clearfix">
                     <div className="fl area">
-                        <h2>38764</h2>
-                        <p>园区总产值(万元)</p>
+                        <h2>2.12</h2>
+                        <p>工件数(百万)</p>
                     </div>
                     <div className="fr">
-                        <DollarOutlined className="icon" style={{ color: "#62c9cb" }} />
+                        <BuildOutlined className="icon" style={{ color: "#62c9cb" }} />
                     </div>
                 </Card>
             </Col>
             <Col span={6}>
                 <Card className="clearfix">
                     <div className="fl area">
-                        <h2>2874</h2>
-                        <p>入驻企业总数(家)</p>
+                        <h2>598.20</h2>
+                        <p>工件面积(m²)(千)</p>
                     </div>
                     <div className="fr">
-                        <LaptopOutlined className="icon" style={{ color: "#e49362" }} />
+                        <AreaChartOutlined className="icon" style={{ color: "#e49362" }} />
                     </div>
                 </Card>
             </Col>
         </Row>
         <Row gutter={16} className="mt">
             <Col span={12}>
-                <Card title="拆单统计情况">
+                <Card title="订单统计情况">
                     <ReactECharts option={data}></ReactECharts>
                 </Card>
             </Col>
             <Col span={12}>
-                <Card title="拆单月度对比">
+                <Card title="订单月度对比">
                     <ReactECharts option={option2}></ReactECharts>
                 </Card>
             </Col>
         </Row>
         <Row gutter={16} className="mt">
             <Col span={12}>
-                <Card title="租户拆单占比">
+                <Card title="用户订单占比">
                     <ReactECharts option={option3}></ReactECharts>
                 </Card>
             </Col>
             <Col span={6}>
-                <Card title="充电桩空闲统计">
+                <Card title="活跃用户占比">
                     <div className="wrap">
-                        <Progress type="circle" percent={75} />
-                        <Statistic title="总充电桩数" value={75} suffix="/ 100" className="mt"/>
+                        <Progress type="circle" percent={68} />
+                        <Statistic title="活跃用户数" value={37} suffix="/ 55" className="mt"/>
                     </div>
-
                 </Card>
             </Col>
             <Col span={6}>
-                <Card title="实时车辆信息" style={{height:"406px"}}>
+                <Card title="活跃用户趋势" style={{height:"406px"}}>
                     <Timeline items={[
                         {
                             children: <><Tag color="green">进场</Tag>08:24车辆 京A66666</>
