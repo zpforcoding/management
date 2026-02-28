@@ -1,5 +1,5 @@
 import { Row, Col, Card, Progress, Statistic, Timeline,Tag } from "antd"
-import { UserOutlined, ShoppingCartOutlined, BuildOutlined, AreaChartOutlined } from "@ant-design/icons"
+import { UserOutlined, ShoppingCartOutlined, BuildOutlined, AreaChartOutlined, ToolOutlined, BorderOuterOutlined, ScissorOutlined } from "@ant-design/icons"
 import ReactECharts from "echarts-for-react"
 import { getOrderSplitData } from "../../api/dashboard"
 import { useEffect, useState } from "react"
@@ -257,31 +257,36 @@ function Dashboard() {
                 </Card>
             </Col>
             <Col span={6}>
-                <Card title="活跃用户趋势" style={{height:"406px"}}>
-                    <Timeline items={[
-                        {
-                            children: <><Tag color="green">进场</Tag>08:24车辆 京A66666</>
-                        },
-                        {
-                            children: <><Tag color="red">出场</Tag>09:15 车辆 京A66666  </>,
-                            color: 'red',
-                        },
-                        {
-                            children: <><Tag color="green">进场</Tag>09:22 车辆 京A23456  </>,
-                        },
-                        {
-                            children: <><Tag color="red">出场</Tag>10:43 车辆 京A18763  </>,
-                            color: 'red',
-                        },
-                        {
-                            children: <><Tag color="green">进场</Tag>13:38 车辆 京A88888  </>,
-                        },
-                        {
-                            children: <><Tag color="green">进场</Tag>14:46 车辆 京A23456  </>,
-
-                        },
-                    ]}/>
-                        
+                <Card title="订单平均指标" style={{ height: '406px' }}>
+                    <div className="average-metrics">
+                        <div className="metric-item">
+                            <div className="fl area">
+                                <h2>2.42</h2>
+                                <p>订单平均材料数量</p>
+                            </div>
+                            <div className="fr">
+                                <ScissorOutlined className="icon" />
+                            </div>
+                        </div>
+                        <div className="metric-item">
+                            <div className="fl area">
+                                <h2>265.84</h2>
+                                <p>订单平均工件数量</p>
+                            </div>
+                            <div className="fr">
+                                <ToolOutlined className="icon" />
+                            </div>
+                        </div>
+                        <div className="metric-item">
+                            <div className="fl area">
+                                <h2>63.35</h2>
+                                <p>订单平均工件面积(m²)</p>
+                            </div>
+                            <div className="fr">
+                                <BorderOuterOutlined className="icon" />
+                            </div>
+                        </div>
+                    </div>
                 </Card>
             </Col>
         </Row>
