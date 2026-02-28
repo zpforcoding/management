@@ -1,5 +1,6 @@
 import React from "react";
-import { Card, Row, Col, Input, Button, Table, Pagination,Tag,Popconfirm,message, Modal, Select, Form } from "antd"
+import { Card, Row, Col, Input, Button, Table, Pagination, Tag, Popconfirm, message, Modal, Select, Form } from "antd"
+import { UserOutlined, CopyOutlined, SettingOutlined } from "@ant-design/icons"
 import "./index.scss"
 import type { TableProps } from 'antd';
 import { useState, useEffect, useMemo,useCallback } from "react";
@@ -550,7 +551,7 @@ function Users() {
                             className="ml" 
                             onClick={showLoginModal}
                             loading={loginLoading}
-                            icon={loginLoading ? undefined : <span>👤</span>}
+                            icon={loginLoading ? undefined : <UserOutlined />}
                         >
                             模拟登录
                         </Button>
@@ -559,7 +560,7 @@ function Users() {
                             className="ml" 
                             onClick={showCopyModal}
                             loading={copyLoading}
-                            icon={copyLoading ? undefined : <span>📋</span>}
+                            icon={copyLoading ? undefined : <CopyOutlined />}
                         >
                             配置拷贝
                         </Button>
@@ -567,7 +568,7 @@ function Users() {
                             type="default" 
                             className="ml" 
                             onClick={showFmsModal}
-                            icon={<span>⚙️</span>}
+                            icon={<SettingOutlined />}
                         >
                             FMS配置
                         </Button>
